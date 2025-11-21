@@ -2,31 +2,31 @@ package com.example.movix.model;
 
 import jakarta.validation.constraints.*;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-@Value
+@Data
 @Builder
 public class Film {
-
-    @NotEmpty(message = "имя не может быть пустым")
-    String name;
-    @Length(min = 10, max = 200, message = "длина описание не может быть меньше 10 букв или больше 200")
-    String description;
-    LocalDate releaseDate;
+    private int id;
+    @NotBlank(message = "имя не может быть пустым")private String name;
+    @Length(min = 10, max = 200, message = "длина описание не может быть меньше 10 букв или больше 200")private String description;
+    private LocalDate releaseDate;
     @Positive
-    int duration;
+    private int duration;
 
-    public static class FilmBuilder {
-        public Film build() {
-            LocalDate firstFilmDate = LocalDate.of(1895, 12, 28);
-            if (this.releaseDate.isBefore(firstFilmDate)) {
-                throw new IllegalArgumentException("Дата релиза не может быть раньше 28.12.1895");
-            }
-            return new Film( name, description, releaseDate, duration);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Film film = (Film) o;
+        return id == film.id;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

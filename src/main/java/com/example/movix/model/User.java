@@ -1,26 +1,30 @@
 package com.example.movix.model;
 
+import ch.qos.logback.core.joran.conditional.IfAction;
 import jakarta.validation.constraints.*;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 import java.time.LocalDate;
+import java.util.Objects;
 
-@Value
-@Builder
+@Data
 public class User {
-    int id;
-    @NotEmpty String login;
-    String name;
-    @NotBlank @Email String email;
-    @NotNull @PastOrPresent LocalDate birthday;
+    private  int id;
+    @NotBlank String login;
+    private  String name;
+    @NotBlank @Email private String email;
+    @NotNull @PastOrPresent private LocalDate birthday;
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
 
-    public static class UserBuilder {
-        public User build() {
-            if (this.name == null) {
-                this.name = this.login;
-            }
-            return new User( id,email, login, name, birthday);
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }
