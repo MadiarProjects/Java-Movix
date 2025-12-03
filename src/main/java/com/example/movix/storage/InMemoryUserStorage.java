@@ -12,11 +12,16 @@ public class InMemoryUserStorage implements UserStorage{
     private final List<User> users = new ArrayList<>();
     private int nextId;
     @Override
-    public List<User> getUsers(){
+    public List<User> getAll(){
         return users;
     }
     @Override
-    public User addUser(User user){
+    public User getById(int id){
+        return (User) users.stream()
+                .map(u-> u.getId()==id);
+    }
+    @Override
+    public User add(User user){
         if (user.getName()==null||user.getName().isBlank()){
             user.setName(user.getLogin());
         }
@@ -25,16 +30,16 @@ public class InMemoryUserStorage implements UserStorage{
         return user;
     }
     @Override
-    public User removeUser(User user){
-        if (!(user ==null)){
-            users.removeIf(u->u.getId()==user.getId());
+    public void delete(int id){
+        if (!(id==0)){
+            users.remove(id);
         }else {
-            throw new NotFoundedException("пользователя с таким айди нет"+user.getId());
+            throw new NotFoundedException("пользователя с таким айди нет"+id);
         }
-        return user;
+        System.out.println("пользователь с айди " + id +"был удален");
     }
     @Override
-    public User updateUser(User user){
+    public User update(User user){
         if(users.contains(user)){
             users.removeIf(u->u.getId()==user.getId());
         }

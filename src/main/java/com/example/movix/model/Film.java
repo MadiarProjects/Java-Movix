@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -17,6 +18,8 @@ public class Film {
     private LocalDate releaseDate;
     @Positive
     private int duration;
+    @Positive
+    private List<User> likes;
 
     @Override
     public boolean equals(Object o) {

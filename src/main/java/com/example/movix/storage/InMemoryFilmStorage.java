@@ -2,7 +2,6 @@ package com.example.movix.storage;
 
 import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
-import com.example.movix.exceptions.ValidationException;
 import com.example.movix.model.Film;
 import org.springframework.stereotype.Component;
 
@@ -26,18 +25,25 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film removeFilm(Film film) {
-        if (!(film == null)) {
-            films.removeIf(f -> f.getId() == film.getId());
+    public void removeFilm(int id) {
+        Film film;
+        if (!(id<=0)) {
+            film = films.remove(id);
         } else {
-            throw new NotFoundedException("такого фильма не сущетсвует");
+            throw new NotFoundedException("фильма под таким айди не существует"+id);
         }
-        return film;
+        System.out.println("фильм успешно был удален :"+film.getName());
+
     }
 
     @Override
     public List<Film> getFilms() {
         return films;
+    }
+    @Override
+    public Film getById(int id){
+        return (Film) films.stream()
+                .map(f->f.getId()==id);
     }
 
     @Override

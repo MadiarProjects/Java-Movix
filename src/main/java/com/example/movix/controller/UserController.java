@@ -1,5 +1,6 @@
 package com.example.movix.controller;
 
+import com.example.movix.service.UserService;
 import com.example.movix.storage.InMemoryUserStorage;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -12,26 +13,50 @@ import java.util.List;
 @RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
-    private final InMemoryUserStorage inMemoryUserStorage;
-
+    private final UserService userService;
     @GetMapping
     public List<User> getUsers() {
-        return inMemoryUserStorage.getUsers();
+        return userService.getAll();
     }
 
-    @DeleteMapping
-    public User removeUser(User user){
-        return inMemoryUserStorage.removeUser(user);
+    @GetMapping("/{id}")
+    public User getById(@PathVariable int id){
+        return userService.getById(id);
+    }
+
+    @GetMapping("/{userId}/friends")
+    public List<User> getFriendsById(@PathVariable int userId){
+        return userService.getFriendsById(userId);
+    }
+
+    @GetMapping("/{userId}/friends/common/{friendId}")
+    public List<User> findCommonFriends(@PathVariable int userId,@PathVariable int friendId){
+        return userService.findCommonFriends(userId,friendId);
     }
 
     @PostMapping
     public User addUser(@Valid @RequestBody User user) {
-        return inMemoryUserStorage.addUser(user);
+        return userService.addUser(user);
+    }
+
+    @PutMapping("/{userId}/friends/{friendId}")
+    public void addFriend(@PathVariable int userId,@PathVariable int friendId){
+        userService.addFriend(userId,friendId);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        return inMemoryUserStorage.updateUser(user);
+        return userService.update(user);
+    }
+
+    @DeleteMapping("/{id}")
+    public void removeUser(@PathVariable int id){
+        userService.remove(id);
+    }
+
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public void removeFriend(@PathVariable int userId,@PathVariable int friendId){
+        userService.removeFriend(userId,friendId);
     }
 
 }

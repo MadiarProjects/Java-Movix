@@ -1,20 +1,25 @@
 package com.example.movix.model;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
-@Data
+@AllArgsConstructor
+@Setter
+@Getter
 public class User {
     private  int id;
     @NotBlank String login;
     private  String name;
     @NotBlank @Email private String email;
     @NotNull @PastOrPresent private LocalDate birthday;
+    private List<User> friends;
+    private List<Film> likedFilms;
 
     @Override
     public boolean equals(Object o) {
