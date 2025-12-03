@@ -1,15 +1,15 @@
 package com.example.movix.model;
 
 import jakarta.validation.constraints.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Data
-@Builder
+@Getter
+@Setter
+@AllArgsConstructor
 public class Film {
     private int id;
     @NotBlank(message = "имя не может быть пустым")private String name;
