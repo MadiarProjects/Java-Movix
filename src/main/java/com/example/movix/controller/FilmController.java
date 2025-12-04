@@ -1,19 +1,15 @@
 package com.example.movix.controller;
 
-import com.example.movix.exceptions.ValidationException;
-import com.example.movix.model.User;
 import com.example.movix.service.FilmService;
-import com.example.movix.service.UserService;
-import com.example.movix.storage.InMemoryFilmStorage;
 import jakarta.validation.Valid;
 import com.example.movix.model.Film;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
+
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
 

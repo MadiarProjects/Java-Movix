@@ -1,17 +1,16 @@
 package com.example.movix.controller;
 
 import com.example.movix.service.UserService;
-import com.example.movix.storage.InMemoryUserStorage;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import com.example.movix.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     @GetMapping

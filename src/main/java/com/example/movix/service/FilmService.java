@@ -51,22 +51,20 @@ public class FilmService {
     public String addLike(int filmId,int userId){
         User user = userStorage.getById(userId);
         Film film=filmStorage.getById(filmId);
-        if (user.getLikedFilms().contains(film)){
+        if (film.getLikes().contains(user)){
             throw new AlreadyExictException("этот пользователь уже ставил лайк на этот фильм");
         }else{
             film.getLikes().add(user);
-            user.getLikedFilms().add(film);
             return "у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков";
         }
     }
     public String deleteLike(int filmId,int userId){
         User user = userStorage.getById(userId);
         Film film = filmStorage.getById(filmId);
-        if (!user.getLikedFilms().contains(film)){
+        if (!film.getLikes().contains(user)){
             throw new NotFoundedException("этот пользователь не ставил лайк на этот фильм ещё");
         }else {
             film.getLikes().remove(user);
-            user.getLikedFilms().remove(film);
             return "у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков";
         }
     }
