@@ -5,8 +5,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -15,11 +14,10 @@ public class Film {
     private int id;
     @NotBlank(message = "имя не может быть пустым")private String name;
     @Length(min = 10, max = 200, message = "длина описание не может быть меньше 10 букв или больше 200")private String description;
-    private LocalDate releaseDate;
+    private final LocalDate releaseDate;
     @Positive
-    private int duration;
-    @Positive
-    private List<User> likes;
+    private final int duration;
+    private final List<User> likes=new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

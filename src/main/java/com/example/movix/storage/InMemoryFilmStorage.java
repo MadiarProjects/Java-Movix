@@ -40,10 +40,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     public List<Film> getFilms() {
         return films;
     }
+
     @Override
     public Film getById(int id){
-        return (Film) films.stream()
-                .map(f->f.getId()==id);
+        return films.stream()
+                .filter(f->f.getId()==id)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundedException(""));
     }
 
     @Override
@@ -53,7 +56,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             films.add(film);
             return film;
         } else {
-            throw new InvalidParamException("не правильный айди");
+            throw new NotFoundedException("с таким айди не существует ");
         }
     }
 }

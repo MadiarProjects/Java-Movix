@@ -5,6 +5,7 @@ import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.User;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class InMemoryUserStorage implements UserStorage{
     private final List<User> users = new ArrayList<>();
     private int nextId;
@@ -22,7 +24,7 @@ public class InMemoryUserStorage implements UserStorage{
     @Override
     public User getById(int id){
         User user=null;
-        for (int i = 0; i < id; i++) {
+        for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId()==id){
                 user=users.get(i);
             }
@@ -48,7 +50,7 @@ public class InMemoryUserStorage implements UserStorage{
         }else {
             throw new NotFoundedException("пользователя с таким айди нет"+id);
         }
-        System.out.println("пользователь с айди " + id +"был удален");
+        log.info("пользователь с айди " + id +"был удален");
     }
     @Override
     public User update(User user){

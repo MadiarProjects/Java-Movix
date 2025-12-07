@@ -6,6 +6,7 @@ import com.example.movix.model.User;
 import com.example.movix.storage.UserStorage;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class UserService {
     private final UserStorage userStorage;
 
@@ -41,40 +43,30 @@ public class UserService {
     public void addFriend(int userId, int friendId) {
         User user = userStorage.getById(userId);
         User friend = userStorage.getById(friendId);
-        List<User> userFriends = new ArrayList<>();
-        List<User> friendFriends = new ArrayList<>();
-        if (user.getFriends().contains(friend) ){
-            throw new AlreadyExictException("пользователи уже друзья");
+        if (friend.getFriends().contains(user) || user.getFriends().contains(friend)) {
+            throw new AlreadyExictException("пользователи уже состоят в друзьях у друг друга");
         }
-        if (user.getFriends() == null) {
-            userFriends.add(friend);
-            user.setFriends(userFriends);
-        } else {
-            userFriends = user.getFriends();
-            userFriends.add(friend);
-            user.setFriends(userFriends);
-        }
-        if (friend.getFriends() == null) {
-            friendFriends.add(user);
-            friend.setFriends(friendFriends);
-        } else {
-            friendFriends = friend.getFriends();
-            friendFriends.add(user);
-            friend.setFriends(friendFriends);
-        }
+        user.getFriends().add(friend);
+        friend.getFriends().add(user);
         userStorage.update(user);
         userStorage.update(friend);
-        System.out.println(user.getName() + " теперь друзья с " + friend.getName());
+        log.info(
+                user.getName() + " теперь друзья с " + friend.getName());
+
     }
 
     public void removeFriend(int userId, int friendId) {
         User user = userStorage.getById(userId);
         User friend = userStorage.getById(friendId);
+
+//        if (!(friend.getFriends().contains(user) || user.getFriends().contains(friend))) {
+//            throw new NotFoundedException("пользователи не были в друзьях у друг друга");
+//        }
         user.getFriends().remove(friend);
         friend.getFriends().remove(user);
         userStorage.update(user);
         userStorage.update(friend);
-        System.out.println(user.getName() + " и " + friend.getName() + " больше не друзья");
+        log.info(user.getName() + " и " + friend.getName() + " больше не друзья");
     }
 
     public List<User> getFriendsById(int userId) {

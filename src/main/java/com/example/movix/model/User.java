@@ -1,5 +1,6 @@
 package com.example.movix.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +21,7 @@ public class User {
     private  String name;
     @NotBlank @Email private String email;
     @NotNull @PastOrPresent private final LocalDate birthday;
-    private  List<User> friends;
+    @JsonIgnore private final List<User> friends=new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

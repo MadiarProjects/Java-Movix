@@ -1,6 +1,7 @@
 package com.example.movix.controller;
 
 import com.example.movix.exceptions.ErrorResponce;
+import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,5 +15,9 @@ public class GLobalExceptionHandler {
     public ErrorResponce notFounded(NotFoundedException e){
         return new ErrorResponce(e.getMessage());
     }
-
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponce invalidParam(InvalidParamException e){
+        return new ErrorResponce(e.getMessage());
+    }
 }

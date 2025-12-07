@@ -40,7 +40,7 @@ public class UserController {
 
     @PutMapping("/{userId}/friends/{friendId}")
     public void addFriend(@PathVariable int userId,@PathVariable int friendId){
-        userService.addFriend(userId,friendId);
+         userService.addFriend(userId,friendId);
     }
 
     @PutMapping
