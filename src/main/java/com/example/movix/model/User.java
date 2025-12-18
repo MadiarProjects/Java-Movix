@@ -16,7 +16,7 @@ import java.util.Objects;
 @Setter
 @Getter
 public class User {
-    private  int id;
+    private  long id;
     @NotBlank private final String login;
     private  String name;
     @NotBlank @Email private String email;
