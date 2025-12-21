@@ -1,5 +1,6 @@
 package com.example.movix.storage;
 
+import com.example.movix.exceptions.AlreadyExictException;
 import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.User;
@@ -22,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage{
         return users;
     }
     @Override
-    public User getById(int id){
+    public User getById(Long id){
         User user=null;
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getId()==id){
@@ -44,7 +45,7 @@ public class InMemoryUserStorage implements UserStorage{
         return user;
     }
     @Override
-    public void deleteById(int id){
+    public void deleteById(Long id){
         if (!(id==0)){
             users.remove(id);
         }else {
@@ -61,5 +62,52 @@ public class InMemoryUserStorage implements UserStorage{
             throw new NotFoundedException("пользователя с таким айди не существует");
         }
         return user;
+    }
+
+    @Override
+    public void removeFriend(Long userId, Long friendId) {
+        User user = getById(userId);
+        User friend = getById(friendId);
+//        if (!(friend.getFriends().contains(user) || user.getFriends().contains(friend))) {
+//            throw new NotFoundedException("пользователи не были в друзьях у друг друга");
+//        }
+        user.getFriends().remove(friend);
+        friend.getFriends().remove(user);
+        update(user);
+        update(friend);
+        log.info(user.getName() + " и " + friend.getName() + " больше не друзья");
+    }
+
+
+    @Override
+    public void addFriend(Long userId, Long friendId) {
+        User user=getById(userId);
+        User friend=getById(friendId);
+        if (friend.getFriends().contains(user) || user.getFriends().contains(friend)) {
+            throw new AlreadyExictException("пользователи уже состоят в друзьях у друг друга");
+        }
+        user.getFriends().add(friend);
+        friend.getFriends().add(user);
+        update(user);
+        update(friend);
+        log.info(
+                user.getName() + " теперь друзья с " + friend.getName());
+    }
+
+    @Override
+    public List<User> findCommonFriends(Long userId, Long friendId) {
+        User user = getById(userId);
+        User friend = getById(friendId);
+        List<User> commanFriends = new ArrayList<>(user.getFriends());
+        commanFriends.retainAll(friend.getFriends());
+        if (commanFriends.isEmpty()) {
+            throw new NotFoundedException("нет общих друзей");
+        }
+        return commanFriends;
+    }
+
+    @Override
+    public List<User> getFriendsById(Long userId) {
+        return getById(userId).getFriends();
     }
 }

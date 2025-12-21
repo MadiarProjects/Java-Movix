@@ -43,7 +43,7 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     @Transactional
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         String sql= """
                 delete from users where id=?;
                 """;
@@ -59,7 +59,7 @@ public class UserDbStorage implements UserStorage{
 
     @Override
     @Transactional
-    public User getById(int id) {
+    public User getById(Long id) {
         String sql= """
                 select
                 u.id as user_id,
@@ -144,7 +144,7 @@ public class UserDbStorage implements UserStorage{
     }
 
     @Override
-    public List<User> getFriendsByID(Long userId) {
+    public List<User> getFriendsById(Long userId) {
         String sql= """
                 select 
                 u.id as user_id,
