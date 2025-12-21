@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Mpa {
-    private Long id;
-    private String name;
+    private final Long id;
+    private final String name;
 }

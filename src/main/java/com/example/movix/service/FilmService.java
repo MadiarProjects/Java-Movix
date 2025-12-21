@@ -20,11 +20,11 @@ public class FilmService {
     private final UserStorage userStorage;
 
     public Film add(Film film){
-        return filmStorage.addFilm(film);
+        return filmStorage.add(film);
     }
 
     public List<Film> getAll(){
-        return filmStorage.getFilms();
+        return filmStorage.getAll();
     }
 
     public Film getById(Long id){
@@ -32,7 +32,7 @@ public class FilmService {
     }
 
     public List<Film> getPopulars(Long count){
-        List<Film> films= filmStorage.getFilms();
+        List<Film> films= filmStorage.getAll();
         if (count!=null){
             return films.stream()
                     .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
@@ -48,11 +48,11 @@ public class FilmService {
     }
 
     public Film update(Film film){
-        return filmStorage.updateFilm(film);
+        return filmStorage.update(film);
     }
 
     public void remove(Long id){
-        filmStorage.removeFilm(id);
+        filmStorage.deleteById(id);
     }
 
     public void addLike(Long filmId, Long userId){
@@ -62,7 +62,7 @@ public class FilmService {
             throw new AlreadyExictException("этот пользователь уже ставил лайк на этот фильм");
         }else{
             film.getLikes().add(user);
-            filmStorage.updateFilm(film);
+            filmStorage.update(film);
              log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
         }
     }
@@ -74,7 +74,7 @@ public class FilmService {
             throw new NotFoundedException("этот пользователь не ставил лайк на этот фильм ещё");
         }else {
             film.getLikes().remove(user);
-            filmStorage.updateFilm(film);
+            filmStorage.update(film);
             log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
         }
     }

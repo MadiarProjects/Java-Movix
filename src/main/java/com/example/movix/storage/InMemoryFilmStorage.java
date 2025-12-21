@@ -15,7 +15,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private int nextId;
 
     @Override
-    public Film addFilm(Film film) {
+    public Film add(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new InvalidParamException("дата релиза не должна быть раньше 1895,12,28");
         }
@@ -25,7 +25,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void removeFilm(Long id) {
+    public void deleteById(Long id) {
         Film film;
         if (!(id<=0)) {
             film = films.remove(id);
@@ -37,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getFilms() {
+    public List<Film> getAll() {
         return films;
     }
 
@@ -50,7 +50,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film updateFilm(Film film) {
+    public Film update(Film film) {
         if (films.contains(film)) {
             films.removeIf(f -> f.getId() == film.getId());
             films.add(film);

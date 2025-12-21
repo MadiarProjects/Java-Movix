@@ -1,10 +1,8 @@
 package com.example.movix.storage;
 
 import com.example.movix.exceptions.AlreadyExictException;
-import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.User;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

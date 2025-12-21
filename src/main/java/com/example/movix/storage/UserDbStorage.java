@@ -161,7 +161,7 @@ public class UserDbStorage implements UserStorage{
     }
 
     private User mapRow (ResultSet rs,int rowNum)throws SQLException {
-        long id=rs.getLong("user_id");
+        Long id=rs.getLong("user_id");
         String login=rs.getString("user_login");
         String name=rs.getString("user_name");
         String email= rs.getString("user_email");
