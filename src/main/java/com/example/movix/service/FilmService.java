@@ -1,7 +1,6 @@
 package com.example.movix.service;
 
 import com.example.movix.exceptions.AlreadyExictException;
-import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.Film;
 import com.example.movix.model.User;
@@ -11,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,11 +27,11 @@ public class FilmService {
         return filmStorage.getFilms();
     }
 
-    public Film getById(int id){
+    public Film getById(Long id){
         return filmStorage.getById(id);
     }
 
-    public List<Film> getPopulars(Integer count){
+    public List<Film> getPopulars(Long count){
         List<Film> films= filmStorage.getFilms();
         if (count!=null){
             return films.stream()
@@ -54,11 +51,11 @@ public class FilmService {
         return filmStorage.updateFilm(film);
     }
 
-    public void remove(int id){
+    public void remove(Long id){
         filmStorage.removeFilm(id);
     }
 
-    public void addLike(int filmId,int userId){
+    public void addLike(Long filmId, Long userId){
         User user = userStorage.getById(userId);
         Film film=filmStorage.getById(filmId);
         if (film.getLikes().contains(user)){
@@ -70,7 +67,7 @@ public class FilmService {
         }
     }
 
-    public void deleteLike(int filmId,int userId){
+    public void deleteLike(Long filmId, Long userId){
         User user = userStorage.getById(userId);
         Film film = filmStorage.getById(filmId);
         if (!film.getLikes().contains(user)){

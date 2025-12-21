@@ -25,7 +25,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void removeFilm(int id) {
+    public void removeFilm(Long id) {
         Film film;
         if (!(id<=0)) {
             film = films.remove(id);
@@ -42,7 +42,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film getById(int id){
+    public Film getById(Long id){
         return films.stream()
                 .filter(f->f.getId()==id)
                 .findFirst()
