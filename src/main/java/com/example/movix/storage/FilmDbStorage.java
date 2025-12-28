@@ -1,8 +1,10 @@
 package com.example.movix.storage;
 
 import com.example.movix.model.Film;
+import com.example.movix.model.Genre;
 import com.example.movix.model.Mpa;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Primary
 public class FilmDbStorage implements FilmStorage{
     private final JdbcTemplate jdbcTemplate;
     @Override
@@ -93,6 +96,32 @@ public class FilmDbStorage implements FilmStorage{
     public Film update(Film film) {
         return null;
     }
+
+    @Override
+    public void addLike(Long filmId, Long userId) {
+
+    }
+
+    @Override
+    public void deleteLike(Long filmId, Long userId) {
+
+    }
+
+    @Override
+    public List<Film> getPopulars(Long count) {
+        return List.of();
+    }
+
+    @Override
+    public void addGenre(Film film) {
+
+    }
+
+    @Override
+    public List<Genre> getGenres() {
+        return List.of();
+    }
+
     private Film mapRow (ResultSet rs, int rowNum)throws SQLException {
         Long id=rs.getLong("film_id");
         String name=rs.getString("film_name");
@@ -101,7 +130,7 @@ public class FilmDbStorage implements FilmStorage{
         int duration =rs.getInt("film_duration");
         Long mpaId=rs.getLong("film_mpa");
         String sqlForMpa= """
-                select 
+                select
                 m.id as mpa_id,
                 m.name as mpa_name
                 from mpa m

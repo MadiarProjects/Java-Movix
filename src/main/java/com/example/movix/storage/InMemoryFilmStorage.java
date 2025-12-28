@@ -3,6 +3,7 @@ package com.example.movix.storage;
 import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.Film;
+import com.example.movix.model.Genre;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final List<Film> films = new ArrayList<>();
-    private int nextId;
+    private Long nextId;
 
     @Override
     public Film add(Film film) {
@@ -28,7 +29,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public void deleteById(Long id) {
         Film film;
         if (!(id<=0)) {
-            film = films.remove(id);
+            film = films.remove(Math.toIntExact(id));
         } else {
             throw new NotFoundedException("фильма под таким айди не существует"+id);
         }
@@ -44,7 +45,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getById(Long id){
         return films.stream()
-                .filter(f->f.getId()==id)
+                .filter(f->f.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundedException(""));
     }
@@ -52,11 +53,36 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film update(Film film) {
         if (films.contains(film)) {
-            films.removeIf(f -> f.getId() == film.getId());
+            films.removeIf(f -> f.getId().equals(film.getId()));
             films.add(film);
             return film;
         } else {
             throw new NotFoundedException("с таким айди не существует ");
         }
+    }
+
+    @Override
+    public void addLike(Long filmId, Long userId) {
+
+    }
+
+    @Override
+    public void deleteLike(Long filmId, Long userId) {
+
+    }
+
+    @Override
+    public List<Film> getPopulars(Long count) {
+        return List.of();
+    }
+
+    @Override
+    public void addGenre(Film film) {
+
+    }
+
+    @Override
+    public List<Genre> getGenres() {
+        return List.of();
     }
 }

@@ -2,6 +2,7 @@ package com.example.movix.storage;
 
 import com.example.movix.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -114,6 +115,7 @@ public class UserDbStorage implements UserStorage{
         String sql = """
                 delete from users_friends where user_id=? and friend_id=?;
         """;
+        jdbcTemplate.update(sql,friendId,userId);
         jdbcTemplate.update(sql,userId,friendId);
     }
 
@@ -122,6 +124,7 @@ public class UserDbStorage implements UserStorage{
         String sql= """
                 insert into users_friends (user_id, friend_id) VALUES (?,?);
                 """;
+        jdbcTemplate.update(sql,friendId,userId);
         jdbcTemplate.update(sql,userId,friendId);
     }
 
@@ -162,9 +165,9 @@ public class UserDbStorage implements UserStorage{
 
     private User mapRow (ResultSet rs,int rowNum)throws SQLException {
         Long id=rs.getLong("user_id");
-        String login=rs.getString("user_login");
-        String name=rs.getString("user_name");
-        String email= rs.getString("user_email");
+        String login=rs.getString("user_login").trim();
+        String name=rs.getString("user_name").trim();
+        String email= rs.getString("user_email").trim();
         LocalDate birthday= rs.getDate("user_birthday").toLocalDate();
         return new User(id,login,name,email,birthday);
     }

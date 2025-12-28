@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class InMemoryUserStorage implements UserStorage{
     private final List<User> users = new ArrayList<>();
-    private int nextId;
+    private Long nextId;
     @Override
     public List<User> getAll(){
         return users;
@@ -24,7 +24,7 @@ public class InMemoryUserStorage implements UserStorage{
     public User getById(Long id){
         User user=null;
         for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId()==id){
+            if (users.get(i).getId().equals(id)){
                 user=users.get(i);
             }
         }
@@ -45,7 +45,7 @@ public class InMemoryUserStorage implements UserStorage{
     @Override
     public void deleteById(Long id){
         if (!(id==0)){
-            users.remove(id);
+            users.remove(Math.toIntExact(id));
         }else {
             throw new NotFoundedException("пользователя с таким айди нет"+id);
         }
@@ -54,7 +54,7 @@ public class InMemoryUserStorage implements UserStorage{
     @Override
     public User update(User user){
         if(users.contains(user)){
-            users.removeIf(u->u.getId()==user.getId());
+            users.removeIf(u->u.getId().equals(user.getId()));
             users.add(user);
         }else {
             throw new NotFoundedException("пользователя с таким айди не существует");
@@ -96,12 +96,12 @@ public class InMemoryUserStorage implements UserStorage{
     public List<User> findCommonFriends(Long userId, Long friendId) {
         User user = getById(userId);
         User friend = getById(friendId);
-        List<User> commanFriends = new ArrayList<>(user.getFriends());
-        commanFriends.retainAll(friend.getFriends());
-        if (commanFriends.isEmpty()) {
+        List<User> commonFriends = new ArrayList<>(user.getFriends());
+        commonFriends.retainAll(friend.getFriends());
+        if (commonFriends.isEmpty()) {
             throw new NotFoundedException("нет общих друзей");
         }
-        return commanFriends;
+        return commonFriends;
     }
 
     @Override
