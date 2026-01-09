@@ -1,9 +1,14 @@
 package com.example.movix.storage;
 
+import com.example.movix.exceptions.AlreadyExictException;
 import com.example.movix.exceptions.InvalidParamException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.Film;
 import com.example.movix.model.Genre;
+import com.example.movix.model.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Slf4j
+@RequiredArgsConstructor
 public class InMemoryFilmStorage implements FilmStorage {
     private final List<Film> films = new ArrayList<>();
-    private Long nextId;
-
+    private Long nextId=0L  ;
+    private final UserStorage userStorage;
     @Override
     public Film add(Film film) {
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
@@ -63,26 +70,44 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public void addLike(Long filmId, Long userId) {
-
+        User user = userStorage.getById(userId);
+        Film film=getById(filmId);
+        if (film.getLikes().contains(user)){
+            throw new AlreadyExictException("этот пользователь уже ставил лайк на этот фильм");
+        }else{
+            film.getLikes().add(user);
+            update(film);
+            log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
+        }
     }
 
     @Override
     public void deleteLike(Long filmId, Long userId) {
-
+        User user = userStorage.getById(userId);
+        Film film = getById(filmId);
+        if (!film.getLikes().contains(user)){
+            throw new NotFoundedException("этот пользователь не ставил лайк на этот фильм ещё");
+        }else {
+            film.getLikes().remove(user);
+            update(film);
+            log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
+        }
     }
 
     @Override
     public List<Film> getPopulars(Long count) {
-        return List.of();
+        if (count!=null){
+            return films.stream()
+                    .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
+                    .limit(count)
+                    .toList();
+        }
+        else {
+            return  films.stream()
+                    .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
+                    .limit(10)
+                    .toList();
+        }
     }
 
-    @Override
-    public void addGenre(Film film) {
-
-    }
-
-    @Override
-    public List<Genre> getGenres() {
-        return List.of();
-    }
 }

@@ -32,19 +32,7 @@ public class FilmService {
     }
 
     public List<Film> getPopulars(Long count){
-        List<Film> films= filmStorage.getAll();
-        if (count!=null){
-            return films.stream()
-                    .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
-                    .limit(count)
-                    .toList();
-        }
-        else {
-            return  films.stream()
-                    .sorted((f1, f2) -> Integer.compare(f2.getLikes().size(), f1.getLikes().size()))
-                    .limit(10)
-                    .toList();
-        }
+        return filmStorage.getPopulars(count);
     }
 
     public Film update(Film film){
@@ -56,27 +44,11 @@ public class FilmService {
     }
 
     public void addLike(Long filmId, Long userId){
-        User user = userStorage.getById(userId);
-        Film film=filmStorage.getById(filmId);
-        if (film.getLikes().contains(user)){
-            throw new AlreadyExictException("этот пользователь уже ставил лайк на этот фильм");
-        }else{
-            film.getLikes().add(user);
-            filmStorage.update(film);
-             log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
-        }
+        filmStorage.addLike(filmId,userId);
     }
 
     public void deleteLike(Long filmId, Long userId){
-        User user = userStorage.getById(userId);
-        Film film = filmStorage.getById(filmId);
-        if (!film.getLikes().contains(user)){
-            throw new NotFoundedException("этот пользователь не ставил лайк на этот фильм ещё");
-        }else {
-            film.getLikes().remove(user);
-            filmStorage.update(film);
-            log.info("у фильма "+film.getName()+" "+ film.getLikes().size()+" лайков");
-        }
+        filmStorage.deleteLike(filmId,userId);
     }
 
 }
