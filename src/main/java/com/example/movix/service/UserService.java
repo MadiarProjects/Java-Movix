@@ -37,18 +37,25 @@ public class UserService {
     }
 
     public void addFriend(Long userId, Long friendId) {
+        userStorage.getById(userId);
+        userStorage.getById(friendId);
         userStorage.addFriend(userId,friendId);
     }
 
     public void removeFriend(Long userId, Long friendId) {
+        userStorage.getById(userId);
+        userStorage.getById(friendId);
         userStorage.removeFriend(userId,friendId);
     }
 
     public List<User> getFriendsById(Long userId) {
+        userStorage.getById(userId);
         return userStorage.getFriendsById(userId);
     }
 
     public List<User> findCommonFriends(Long userId, Long friendId) {
+        userStorage.getById(userId);
+        userStorage.getById(friendId);
        return userStorage.findCommonFriends(userId,friendId);
     }
 

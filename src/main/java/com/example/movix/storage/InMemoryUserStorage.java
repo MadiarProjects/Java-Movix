@@ -23,9 +23,9 @@ public class InMemoryUserStorage implements UserStorage{
     @Override
     public User getById(Long id){
         User user=null;
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId().equals(id)){
-                user=users.get(i);
+        for (User value : users) {
+            if (value.getId().equals(id)) {
+                user = value;
             }
         }
         if (user==null){

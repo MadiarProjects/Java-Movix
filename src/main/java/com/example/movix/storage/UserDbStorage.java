@@ -1,5 +1,7 @@
 package com.example.movix.storage;
 
+import com.example.movix.exceptions.InvalidParamException;
+import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -115,16 +117,15 @@ public class UserDbStorage implements UserStorage{
         String sql = """
                 delete from users_friends where user_id=? and friend_id=?;
         """;
-        jdbcTemplate.update(sql,friendId,userId);
         jdbcTemplate.update(sql,userId,friendId);
     }
 
     @Override
+    @Transactional
     public void addFriend(Long userId, Long friendId) {
         String sql= """
-                insert into users_friends (user_id, friend_id) VALUES (?,?);
+                INSERT INTO users_friends (user_id,friend_id)VALUES (?,?);
                 """;
-        jdbcTemplate.update(sql,friendId,userId);
         jdbcTemplate.update(sql,userId,friendId);
     }
 
@@ -157,7 +158,8 @@ public class UserDbStorage implements UserStorage{
                 u.birthday as user_birthday
                 from users u 
                 join users_friends uf on u.id = uf.friend_id
-                where uf.user_id=?;
+                where uf.user_id=?
+                order by uf.friend_id;
                 """;
 
         return jdbcTemplate.query(sql,this::mapRow,userId);
