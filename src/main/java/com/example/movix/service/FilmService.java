@@ -3,6 +3,7 @@ package com.example.movix.service;
 import com.example.movix.exceptions.AlreadyExictException;
 import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.Film;
+import com.example.movix.model.Genre;
 import com.example.movix.model.User;
 import com.example.movix.storage.FilmStorage;
 import com.example.movix.storage.UserStorage;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 @AllArgsConstructor

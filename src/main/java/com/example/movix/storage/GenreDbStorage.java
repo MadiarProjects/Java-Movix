@@ -1,5 +1,6 @@
 package com.example.movix.storage;
 
+import com.example.movix.exceptions.NotFoundedException;
 import com.example.movix.model.Genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,22 @@ public class GenreDbStorage implements GenreStorage{
                 """;
 
         return jdbcTemplate.query(sql,this::mapRow);
+    }
+
+    @Override
+    public Genre getById(Long id) {
+        String sql= """
+                select 
+                    g.id as genre_id,
+                    g.name as genre_name
+                    from genres g 
+                where g.id=?
+                """;
+
+        return jdbcTemplate.query(sql, this::mapRow,id)
+                .stream()
+                .findFirst()
+                .orElseThrow(()->new NotFoundedException("Not Founded by this id"+id));
     }
 
     private Genre mapRow(ResultSet rs,int rowNum)throws SQLException {

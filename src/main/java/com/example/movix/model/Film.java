@@ -20,8 +20,11 @@ public class Film {
     @Positive
     private  int duration;
     private final List<User> likes=new ArrayList<>();
-    private final Set<Genre> genres=new HashSet<>();
+    private Set<Genre> genres = new TreeSet<>(Comparator.comparingLong(Genre::getId));
+
     private Mpa mpa;
+
+
 
 
     @Override
